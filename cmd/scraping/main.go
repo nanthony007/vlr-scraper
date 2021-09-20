@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/csv"
-	"github.com/nanthony007/vlr-scraper/pkg"
 	"github.com/nanthony007/vlr-scraper/pkg/scraping"
+	"github.com/nanthony007/vlr-scraper/pkg/utils"
 	"os"
 )
 
@@ -13,13 +13,13 @@ func main() {
 	scraping.FindMapPages(url)
 
 	file, err := os.Open("maps.csv")
-	pkg.CheckErr(err)
+	utils.CheckErr(err)
 	defer file.Close()
 
 	reader := csv.NewReader(file)
 
 	maps, err := reader.ReadAll()
-	pkg.CheckErr(err)
+	utils.CheckErr(err)
 
 	var urls []string
 	for i, mapData := range maps {

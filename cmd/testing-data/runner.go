@@ -3,5 +3,12 @@ package main
 import "github.com/nanthony007/vlr-scraper/pkg/scraping"
 
 func main() {
-	scraping.ScrapePlayerData("https://www.vlr.gg/34979/envy-vs-gambit-esports-valorant-champions-tour-stage-3-masters-berlin-gf/?game=50278&tab=overview", "BOOO")
+	scraping.ScrapeEconomy(
+		"https://www.vlr.gg/13247/vision-strikers-vs-nuturn-champions-tour-korea-stage-1-masters-gf",
+		"TEST", "23773",
+	)
+	scraping.ScrapeGame(
+		"https://www.vlr.gg/13247/vision-strikers-vs-nuturn-champions-tour-korea-stage-1-masters-gf",
+		"TEST", "23773",
+	)
 }

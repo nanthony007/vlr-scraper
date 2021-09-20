@@ -2,26 +2,25 @@ package models
 
 import (
 	"encoding/csv"
-	"github.com/nanthony007/vlr-scraper/pkg"
+	"github.com/nanthony007/vlr-scraper/pkg/utils"
 	"os"
 	"strconv"
 )
 
 type PlayerStats struct {
-	Name string
-	Team string
-	ACS int64
-	K int64
-	D int64
-	A int64
-	PlusMinus int64
-	ADR float64
-	HeadShotPercent int64
-	FirstKill int64
-	FirstDeath int64
+	Name               string
+	Team               string
+	ACS                int64
+	K                  int64
+	D                  int64
+	A                  int64
+	PlusMinus          int64
+	ADR                float64
+	HeadShotPercent    int64
+	FirstKill          int64
+	FirstDeath         int64
 	FirstKillDeathDiff int64
 }
-
 
 func NewPlayerStat(values [12]string) PlayerStats {
 	// fix types
@@ -62,8 +61,6 @@ func NewPlayerStat(values [12]string) PlayerStats {
 	return playerInfo
 }
 
-
-
 func convertPlayerToStringArray(player PlayerStats) []string {
 	// handle types
 	array := make([]string, 12)
@@ -83,11 +80,10 @@ func convertPlayerToStringArray(player PlayerStats) []string {
 	return array
 }
 
-
 func PlayersToFile(players []PlayerStats, fileprefix string) {
 	fp := fileprefix + "_players.csv"
 	file, err := os.Create(fp)
-	pkg.CheckErr(err)
+	utils.CheckErr(err)
 	defer file.Close()
 
 	writer := csv.NewWriter(file)
@@ -99,6 +95,6 @@ func PlayersToFile(players []PlayerStats, fileprefix string) {
 	for _, player := range players {
 		writablePlayer := convertPlayerToStringArray(player)
 		err := writer.Write(writablePlayer)
-		pkg.CheckErr(err)
+		utils.CheckErr(err)
 	}
 }

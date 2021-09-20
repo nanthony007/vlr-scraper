@@ -4,7 +4,11 @@ import (
 	"fmt"
 	"github.com/gocolly/colly"
 	"github.com/nanthony007/vlr-scraper/pkg/models"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -110,12 +114,17 @@ func ScrapeGame(url string, mapName string, gameID string) models.RoundResults {
 	})
 
 	c.OnScraped(func(r *colly.Response) {
-		// this is where we do a lot of data processing
+		// this is where we do a lot of io
 		fmt.Println("Finished")
-		// models.PlayersToFile(playerData, mapName)
+		dirPath := filepath.Join("data", "match_"+gameID, "maps", mapName)
+		os.MkdirAll(dirPath, 0777)
+		fPath := filepath.Join(dirPath, "player_stats.csv")
+		models.PlayersToFile(playerData, fPath)
 		mapData := models.NewMapInfo(teamData, mapInfo)
-		fmt.Println(mapData)
-		fmt.Println(playerData)
+		ymlData, err := yaml.Marshal(&mapData)
+		ymlPath := filepath.Join(dirPath, "map_info.yaml")
+		err = ioutil.WriteFile(ymlPath, ymlData, 0644)
+		models.CheckErr(err)
 	})
 
 	c.Visit(url)

@@ -2,7 +2,10 @@ module github.com/nanthony007/vlr-scraper
 
 go 1.17
 
-require github.com/gocolly/colly v1.2.0
+require (
+	github.com/gocolly/colly v1.2.0
+	gopkg.in/yaml.v2 v2.4.0
+)
 
 require (
 	github.com/PuerkitoBio/goquery v1.7.1 // indirect

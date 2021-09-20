@@ -79,8 +79,7 @@ func convertPlayerToStringArray(player PlayerStats) []string {
 	return array
 }
 
-func PlayersToFile(players []PlayerStats, fileprefix string) {
-	fp := fileprefix + "_players.csv"
+func PlayersToFile(players []PlayerStats, fp string) {
 	file, err := os.Create(fp)
 	CheckErr(err)
 	defer file.Close()

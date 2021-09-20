@@ -1,6 +1,8 @@
 package models
 
 import (
+	"encoding/csv"
+	"os"
 	"strconv"
 )
 
@@ -28,11 +30,11 @@ func NewTeam(teamData map[string]string) Team {
 }
 
 type MapInfo struct {
-	Name     string
-	Duration string
-	Choice   int
-	Team1    Team
-	Team2    Team
+	Name     string `yaml:"Name"`
+	Duration string `yaml:"Duration"`
+	Choice   int    `yaml:"Choice"`
+	Team1    Team   `yaml:"Team1"`
+	Team2    Team   `yaml:"Team2"`
 }
 
 func NewMapInfo(teamData []map[string]string, mapData map[string]string) MapInfo {
@@ -137,4 +139,34 @@ func NewAllRoundsData(ecoRounds EconomyRounds, resultRounds RoundResults) AllRou
 		}
 	}
 	return AllRoundsData{Rounds: data}
+}
+
+func convertRoundToStringArray(round RoundData) []string {
+	// handle types
+	array := make([]string, 5)
+	strNum := strconv.Itoa(round.Number)
+	array[0] = strNum
+	array[1] = round.Winner
+	array[2] = round.Kind
+	array[3] = round.Eco1
+	array[4] = round.Eco1
+	return array
+}
+
+func RoundsToFile(rounds AllRoundsData, fp string) {
+	file, err := os.Create(fp)
+	CheckErr(err)
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	headers := []string{"RoundNumber", "Winner", "ResultType", "Team1Economy", "Team2Economy"}
+	writer.Write(headers)
+
+	for _, round := range rounds.Rounds {
+		writeableRound := convertRoundToStringArray(round)
+		err := writer.Write(writeableRound)
+		CheckErr(err)
+	}
 }

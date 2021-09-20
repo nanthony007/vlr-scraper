@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func ScrapeMatchOverview(url string, mapName string) {
+func ScrapeMatchOverview(url string) Series {
 	// var rowCount int
 	// var data []models.PlayerStats
 
@@ -54,39 +54,28 @@ func ScrapeMatchOverview(url string, mapName string) {
 		}
 	})
 
-	// this was player scraping, but that will not be done here
-	//// get player stats
-	//c.OnHTML("table.wf-table-inset.mod-overview > tbody > tr", func(e *colly.HTMLElement) {
-	//	// now handle rows
-	//	var rowData [12]string
-	//	rowCount += 1
-	//	// these were HIDDEN javascript tables and its actually ALL the games!
-	//	// BUT this includes the total for the match... i.e. all games... must filter that out
-	//	if rowCount <= 100 {
-	//		// this is iterating each character
-	//		metrics := strings.Split(e.Text, " ")
-	//		for i, metric := range metrics {
-	//			trimmedMetric := strings.TrimSpace(metric)
-	//			cleanedTemp1 := strings.Replace(trimmedMetric, "%", "", 1)
-	//			cleanedTemp2 := strings.Replace(cleanedTemp1, "/", "", 2)
-	//			cleanedMetric := strings.Replace(cleanedTemp2, "+", "", 2)
-	//			rowData[i] = cleanedMetric
-	//		}
-	//		playerInfo := models.NewPlayerStat(rowData)
-	//		data = append(data, playerInfo)
-	//	}
-	//})
-
+	series := Series{}
 	c.OnScraped(func(r *colly.Response) {
 		fmt.Println("Finished")
 		//fmt.Println(data)
 		//models.PlayersToFile(data, mapName)
 		// TODO: modularize below
-		matchResults := map[string]int{}
-		matchResults[teams[0]] = scores[0]
-		matchResults[teams[1]] = scores[1]
-		fmt.Println(matchResults)
+		series.Team1.Name = teams[0]
+		series.Team2.Name = teams[1]
+		series.Team1.Score = scores[0]
+		series.Team2.Score = scores[1]
 	})
 
 	c.Visit(url)
+	return series
+}
+
+type Team struct {
+	Name  string `yaml:"Name"`
+	Score int    `yaml:"Score"`
+}
+
+type Series struct {
+	Team1 Team `yaml:"Team1"`
+	Team2 Team `yaml:"Team2"`
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gocolly/colly"
 	"github.com/nanthony007/vlr-scraper/pkg/models"
+	"github.com/nanthony007/vlr-scraper/pkg/utils"
 	"log"
 	"strings"
 )
@@ -72,7 +73,7 @@ func ScrapeGame(url string, mapName string, gameID string) {
 	c.OnHTML("div.vm-stats-game", func(e *colly.HTMLElement) {
 		// these were HIDDEN (display:none) javascript tables
 		// have to do this looping here bc colly passes each table one at a time
-		table := ExtractPlayerData(e, gameID)
+		table := utils.ExtractPlayerData(e, gameID)
 		for _, row := range table {
 			playerData = append(playerData, row)
 		}

@@ -35,6 +35,7 @@
 10. A way to extract map choice
 11. A way to get the hidden data from one page view
     1. is economy hidden or on another page?
+    2. Could change from 2 (one econ and one overview) or 6+ (previous for each game) to 1 web request!!!
 
 
 ## Analytical ideas:

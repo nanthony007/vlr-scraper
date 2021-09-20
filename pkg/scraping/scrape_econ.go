@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func ScrapeEconomy(url string, mapName string, gameID string) {
+func ScrapeEconomy(url string, mapName string, gameID string) models.EconomyRounds {
 	c := colly.NewCollector()
 
 	c.OnRequest(func(r *colly.Request) {
@@ -56,9 +56,10 @@ func ScrapeEconomy(url string, mapName string, gameID string) {
 			}
 		}
 		economyRounds = models.NewEconomyRounds(actualRounds)
-		fmt.Println(economyRounds)
 	})
 
 	fullUrl := url + "/?game=" + gameID + "&tab=economy"
 	c.Visit(fullUrl)
+
+	return economyRounds
 }

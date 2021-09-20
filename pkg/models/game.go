@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/nanthony007/vlr-scraper/pkg/utils"
 	"strconv"
 )
 
@@ -44,7 +43,7 @@ func NewMapInfo(teamData []map[string]string, mapData map[string]string) MapInfo
 	return MapInfo{
 		Name:     mapData["name"],
 		Duration: mapData["duration"],
-		Choice:   utils.ParseChoice(mapData["choice"]),
+		Choice:   ParseChoice(mapData["choice"]),
 		Team1:    NewTeam(teamData[0]),
 		Team2:    NewTeam(teamData[1]),
 	}
@@ -65,7 +64,7 @@ func NewRoundResult(num int, winner string, kind string) RoundResult {
 }
 
 type RoundResults struct {
-	Results []RoundResult
+	Rounds []RoundResult
 }
 
 func NewRoundResults(results [][]string) RoundResults {
@@ -75,7 +74,7 @@ func NewRoundResults(results [][]string) RoundResults {
 		result := NewRoundResult(num, round[1], round[2])
 		resultsArray = append(resultsArray, result)
 	}
-	return RoundResults{Results: resultsArray}
+	return RoundResults{Rounds: resultsArray}
 }
 
 type EconomyRound struct {
@@ -105,4 +104,37 @@ func NewEconomyRounds(results [][]string) EconomyRounds {
 		resultsArray = append(resultsArray, result)
 	}
 	return EconomyRounds{Rounds: resultsArray}
+}
+
+type RoundData struct {
+	Number int
+	Winner string
+	Kind   string
+	Eco1   string
+	Eco2   string
+}
+
+func NewRoundData(ecoRound EconomyRound, resultRound RoundResult) RoundData {
+	return RoundData{
+		Number: resultRound.Number,
+		Winner: resultRound.Winner,
+		Kind:   resultRound.Kind,
+		Eco1:   ecoRound.Eco1,
+		Eco2:   ecoRound.Eco2,
+	}
+}
+
+type AllRoundsData struct {
+	Rounds []RoundData
+}
+
+func NewAllRoundsData(ecoRounds EconomyRounds, resultRounds RoundResults) AllRoundsData {
+	var data []RoundData
+	if len(ecoRounds.Rounds) == len(resultRounds.Rounds) {
+		for i, _ := range resultRounds.Rounds {
+			round := NewRoundData(ecoRounds.Rounds[i], resultRounds.Rounds[i])
+			data = append(data, round)
+		}
+	}
+	return AllRoundsData{Rounds: data}
 }

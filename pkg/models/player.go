@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/csv"
-	"github.com/nanthony007/vlr-scraper/pkg/utils"
 	"os"
 	"strconv"
 )
@@ -83,7 +82,7 @@ func convertPlayerToStringArray(player PlayerStats) []string {
 func PlayersToFile(players []PlayerStats, fileprefix string) {
 	fp := fileprefix + "_players.csv"
 	file, err := os.Create(fp)
-	utils.CheckErr(err)
+	CheckErr(err)
 	defer file.Close()
 
 	writer := csv.NewWriter(file)
@@ -95,6 +94,6 @@ func PlayersToFile(players []PlayerStats, fileprefix string) {
 	for _, player := range players {
 		writablePlayer := convertPlayerToStringArray(player)
 		err := writer.Write(writablePlayer)
-		utils.CheckErr(err)
+		CheckErr(err)
 	}
 }

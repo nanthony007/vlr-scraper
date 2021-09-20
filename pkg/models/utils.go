@@ -1,8 +1,7 @@
-package utils
+package models
 
 import (
 	"github.com/gocolly/colly"
-	"github.com/nanthony007/vlr-scraper/pkg/models"
 	"log"
 	"strings"
 )
@@ -24,7 +23,7 @@ func ParseChoice(x string) int {
 	}
 }
 
-func ExtractPlayerData(e *colly.HTMLElement, gameId string) (playerData []models.PlayerStats) {
+func ExtractPlayerData(e *colly.HTMLElement, gameId string) (playerData []PlayerStats) {
 	// TODO: add error return
 	var data [12]string
 	// only target game
@@ -40,7 +39,7 @@ func ExtractPlayerData(e *colly.HTMLElement, gameId string) (playerData []models
 				cleanedMetric := strings.Replace(cleanedTemp2, "+", "", 2)
 				data[i] = cleanedMetric
 			}
-			playerInfo := models.NewPlayerStat(data)
+			playerInfo := NewPlayerStat(data)
 			playerData = append(playerData, playerInfo)
 		})
 	}

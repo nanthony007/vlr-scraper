@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"github.com/gocolly/colly"
 	"github.com/nanthony007/vlr-scraper/pkg/models"
-	"github.com/nanthony007/vlr-scraper/pkg/utils"
 	"log"
 	"strings"
 )
 
-func ScrapeGame(url string, mapName string, gameID string) {
+func ScrapeGame(url string, mapName string, gameID string) models.RoundResults {
 
 	// designed to VISIT the match page, then find various HTML elements and call accessory functions to scrape them
 	// accessory functions should take HTML elements and either return data which can be added to global scope
@@ -73,7 +72,7 @@ func ScrapeGame(url string, mapName string, gameID string) {
 	c.OnHTML("div.vm-stats-game", func(e *colly.HTMLElement) {
 		// these were HIDDEN (display:none) javascript tables
 		// have to do this looping here bc colly passes each table one at a time
-		table := utils.ExtractPlayerData(e, gameID)
+		table := models.ExtractPlayerData(e, gameID)
 		for _, row := range table {
 			playerData = append(playerData, row)
 		}
@@ -117,8 +116,8 @@ func ScrapeGame(url string, mapName string, gameID string) {
 		mapData := models.NewMapInfo(teamData, mapInfo)
 		fmt.Println(mapData)
 		fmt.Println(playerData)
-		fmt.Println(rounds)
 	})
 
 	c.Visit(url)
+	return rounds
 }

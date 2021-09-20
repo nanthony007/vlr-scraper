@@ -3,7 +3,7 @@ package scraping
 import (
 	"fmt"
 	"github.com/gocolly/colly"
-	"github.com/nanthony007/vlr-scraper/pkg/utils"
+	"github.com/nanthony007/vlr-scraper/pkg/models"
 	"log"
 	"strconv"
 	"strings"
@@ -35,7 +35,7 @@ func ScrapeMatchOverview(url string, mapName string) {
 		textVal := strings.TrimSpace(e.Text)
 		if textVal != ":" {
 			val, err := strconv.Atoi(textVal)
-			utils.CheckErr(err)
+			models.CheckErr(err)
 			scores = append(scores, val)
 		}
 	})
@@ -47,7 +47,7 @@ func ScrapeMatchOverview(url string, mapName string) {
 		if e.Attr("data-disabled") == "0" && e.Attr("data-game-id") != "all" {
 			gameId := strings.TrimSpace(e.Attr("data-game-id"))
 			val, err := strconv.Atoi(gameId)
-			utils.CheckErr(err)
+			models.CheckErr(err)
 			gameIds = append(gameIds, val)
 			// visit those maps
 			// c.Visit(<new urls>)
